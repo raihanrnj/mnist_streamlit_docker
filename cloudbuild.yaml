@@ -1,0 +1,23 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/[YOUR_PROJECT_ID]/mnist-classifier', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/[YOUR_PROJECT_ID]/mnist-classifier']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'mnist-classifier'
+      - '--image'
+      - 'gcr.io/[YOUR_PROJECT_ID]/mnist-classifier'
+      - '--platform'
+      - 'managed'
+      - '--region'
+      - 'us-central1'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/[YOUR_PROJECT_ID]/mnist-classifier'
